@@ -1,0 +1,11 @@
+LiveVars Todo:
+	1.0 (General Release):
+		- general code cleanup/commenting
+		- revert properties to their "default" (pre-LiveVars) value if they are removed from the toml file
+			- better yet, have a setting for "sitcky" variables (which won't do this) or not
+			I think this requires pretty much refactoring all of the code, though :(
+		- support other game engines via subclass
+			basically, replace the FP.world checks with some extendable version to override/subclass
+		- pause/resume functionality
+		- better error handling of malformed toml
+		- support toml v0.2.0
