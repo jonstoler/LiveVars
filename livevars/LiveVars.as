@@ -2,6 +2,7 @@ package livevars
 {
 import flash.events.Event;
 import flash.events.IOErrorEvent;
+import flash.events.SecurityErrorEvent;
 import flash.net.URLLoader;
 import flash.net.URLRequest;
 import flash.net.getClassByAlias;
@@ -16,7 +17,7 @@ public class LiveVars
 	private static var _contents:String = "";
 	private static var _contentsCache:String = null;
 
-	private static var _fileNotFound:Boolean = false;
+	private static var _errors:Object = {"fileNotFound": false, "sandboxViolation": false};
 
 	public static var silenced:Boolean = false;
 
@@ -45,9 +46,15 @@ public class LiveVars
 			}
 		});
 		loader.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void {
-			if(!_fileNotFound){
+			if(!_errors.fileNotFound){
 				err("The file " + _file + " could not be loaded.");
-				_fileNotFound = true;
+				_errors.fileNotFound = true;
+			}
+		});
+		loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, function(e:Event):void {
+			if(!_errors.sandboxViolation){
+				err("The file " + _file + " could not be loaded due to a sandbox violation.");
+				_errors.sandboxViolation = true;
 			}
 		});
 		loader.load(new URLRequest(_file));
