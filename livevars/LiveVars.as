@@ -74,12 +74,29 @@ public class LiveVars
 		var vars:Object = TOML.parse(_contents);
 		var worldType:String = getQualifiedClassName(FP.world);
 
+		// having dots (packages) in object names is not proper toml, so we use double colon instead
+		worldType = worldType.replace(".", "::");
+
 		for(var prop:String in vars){
 			if(worldType == prop){ // change current public world variables
 				enumerateProperties(vars[prop], FP.world);
 			} else { // try public static variables
 				try {
-					var obj:* = getDefinitionByName(prop);
+					var checkName:String = prop;
+
+					// we have to convert from double colon to actionscript dot syntax here
+					if(prop.indexOf("::") != -1){
+						checkName = "";
+						var split:Array = prop.split("::");
+						for(var i:uint = 0; i < split.length - 1; i++){
+							checkName += split[i];
+							if(i < split.length - 2){ checkName += "."; }
+							else { checkName += "::"; }
+						}
+						checkName += split[split.length - 1];
+					}
+
+					var obj:* = getDefinitionByName(checkName);
 				} catch(e:*) {
 					err("No class named " + prop + " could be found.");
 				}

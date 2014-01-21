@@ -21,7 +21,7 @@ World variables are instance variables that belong to the current World (`FP.wor
 Static variables are placed in objects with a name other than the current World, corresponding to the class name that holds the static variables. These are not instance variables, but they can still be modified in real-time.
 
 > ### A Note on Packages
-> If a Class or World is inside a package, you cannot refer to it directly by name without the corresponding package information. Packages are defined via double colon ("::") in your toml Object name.
+> If a Class or World is inside a package, you cannot refer to it directly by name without the corresponding package information. Packages are referred to with a double colon syntax. (This is automatically converted to an ActionScript-friendly syntax.) For instance, `com::example::Class`.
 
 ## Example
 	
